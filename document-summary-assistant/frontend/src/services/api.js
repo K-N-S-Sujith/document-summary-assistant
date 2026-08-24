@@ -1,26 +1,26 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'VITE_API_URL=https://document-summary-assistant-o43b.onrender.com'
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || 'https://document-summary-assistant-o43b.onrender.com'
 
-/**
- * Calls the backend summarization endpoint. Throws an Error with a
- * user-friendly message on failure (validation error, network error,
- * server error, etc.) so components can display it directly.
- */
 export async function summarizeDocument(file, length) {
   const formData = new FormData()
   formData.append('file', file)
   formData.append('length', length)
 
   let response
+
   try {
     response = await fetch(`${API_BASE_URL}/api/documents/summarize`, {
       method: 'POST',
       body: formData,
     })
   } catch (networkError) {
-    throw new Error('Unable to reach the server. Please check your connection and try again.')
+    throw new Error(
+      'Unable to reach the server. Please check your connection and try again.'
+    )
   }
 
   let data
+
   try {
     data = await response.json()
   } catch (parseError) {
@@ -28,7 +28,9 @@ export async function summarizeDocument(file, length) {
   }
 
   if (!response.ok) {
-    throw new Error(data?.message || 'Something went wrong while generating the summary.')
+    throw new Error(
+      data?.message || 'Something went wrong while generating the summary.'
+    )
   }
 
   return data
